@@ -46,17 +46,14 @@ import org.openmrs.module.cohort.api.db.CohortDAO;
 import org.openmrs.module.cohort.api.db.EncounterSearchCriteriaBuilder;
 
 /**
- * It is a default implementation of {@link cohortService}.
+ * It is a default implementation of {@link CohortService}.
  */
 public class CohortServiceImpl extends BaseOpenmrsService implements CohortService {
 	
 	protected final Log log = LogFactory.getLog(this.getClass());
 	
 	private CohortDAO dao;
-	
-	/**
-	 * @param dao the dao to set
-	 */
+
 	
 	public CohortDAO getDao() {
 		return dao;

@@ -47,7 +47,7 @@ import org.openmrs.module.cohort.api.db.CohortDAO;
 import org.openmrs.module.cohort.api.db.EncounterSearchCriteria;
 
 /**
- * It is a default implementation of  {@link cohortDAO}.
+ * It is a default implementation of  {@link CohortDAO}.
  */
 public class HibernateCohortDAO implements CohortDAO {
 	protected final Log log = LogFactory.getLog(this.getClass());

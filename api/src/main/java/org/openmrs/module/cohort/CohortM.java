@@ -3,6 +3,8 @@ package org.openmrs.module.cohort;
 import java.util.Date;
 import org.openmrs.BaseOpenmrsData;
 import org.openmrs.Location;
+import org.openmrs.Program;
+import org.openmrs.Provider;
 
 public class CohortM extends BaseOpenmrsData {
 	
@@ -17,7 +19,43 @@ public class CohortM extends BaseOpenmrsData {
 	private CohortType cohortType;
 	private CohortProgram cohortProgram;
 	private Boolean groupCohort;
-	
+	private String groupNumber;
+	private String landmark;
+	private Provider provider;
+	private Program program;
+
+	public Program getProgram() {
+		return program;
+	}
+
+	public void setProgram(Program program) {
+		this.program = program;
+	}
+
+	public String getGroupNumber() {
+		return groupNumber;
+	}
+
+	public void setGroupNumber(String groupNumber) {
+		this.groupNumber = groupNumber;
+	}
+
+	public String getLandmark() {
+		return landmark;
+	}
+
+	public void setLandmark(String landmark) {
+		this.landmark = landmark;
+	}
+
+	public Provider getProvider() {
+		return provider;
+	}
+
+	public void setProvider(Provider provider) {
+		this.provider = provider;
+	}
+
 	public Integer getCohortId() {
 		return cohortId;
 	}

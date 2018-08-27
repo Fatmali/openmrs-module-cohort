@@ -1,7 +1,8 @@
 package org.openmrs.module.cohort.web.resource;
 
 import java.util.List;
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.cohort.CohortM;
 import org.openmrs.module.cohort.api.CohortService;
@@ -20,8 +21,10 @@ import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOp
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
 @Resource(name = RestConstants.VERSION_1 + CohortRest.COHORT_NAMESPACE + "/cohort", supportedClass = CohortM.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*", "1.10.*, 1.11.*", "1.12.*", "2.0.*", "2.1.*", "2.2.*"})
-public class CohortRequestResource extends DataDelegatingCrudResource<CohortM> {
+public class CohortRequestResource extends DataDelegatingCrudResource<CohortM>  {
 
+    protected final Log log = LogFactory.getLog(getClass());
+    
     @Override
     public DelegatingResourceDescription getRepresentationDescription(Representation rep) {
 		if (Context.isAuthenticated()) {
@@ -35,8 +38,12 @@ public class CohortRequestResource extends DataDelegatingCrudResource<CohortM> {
 	            description.addProperty("endDate");
 	            description.addProperty("cohortType");
 	            description.addProperty("cohortProgram");
+	            description.addProperty("program");
 	            description.addProperty("groupCohort");
 	            description.addProperty("uuid");
+                description.addProperty("groupNumber");
+                description.addProperty("landmark");
+                description.addProperty("provider");
 	            description.addSelfLink();
 	        } 
 	        else if (rep instanceof FullRepresentation) {
@@ -48,7 +55,11 @@ public class CohortRequestResource extends DataDelegatingCrudResource<CohortM> {
 	            description.addProperty("cohortType");
 	            description.addProperty("cohortProgram");
 	            description.addProperty("groupCohort");
+                description.addProperty("groupNumber");
+                description.addProperty("landmark");
+                description.addProperty("provider");
 	            description.addProperty("uuid");
+                description.addProperty("program");
 				description.addProperty("auditInfo");
 	            description.addSelfLink();
 	        }
@@ -63,12 +74,16 @@ public class CohortRequestResource extends DataDelegatingCrudResource<CohortM> {
         DelegatingResourceDescription description = new DelegatingResourceDescription();
         
         description.addRequiredProperty("name");
+        description.addRequiredProperty("groupNumber");
+        description.addProperty("landmark");
+        description.addProperty("provider");
         description.addProperty("description");
         description.addRequiredProperty("location");
         description.addProperty("startDate");
         description.addProperty("endDate");
         description.addRequiredProperty("cohortType");
         description.addProperty("cohortProgram");
+        description.addRequiredProperty("program");
         description.addRequiredProperty("groupCohort");
         
         return description;
@@ -114,14 +129,24 @@ public class CohortRequestResource extends DataDelegatingCrudResource<CohortM> {
     }
 
     @Override
-    protected PageableResult doGetAll(RequestContext context) throws ResponseException {
+    protected NeedsPaging<CohortM> doGetAll(RequestContext context) throws ResponseException {
     	List<CohortM> cohort = Context.getService(CohortService.class).getAllCohorts();
         return new NeedsPaging<CohortM>(cohort, context);
     }
 
     @Override
-    protected PageableResult doSearch(RequestContext context) {
-        List<CohortM> cohort = Context.getService(CohortService.class).findCohortsMatching(context.getParameter("q"));
+    protected NeedsPaging<CohortM> doSearch(RequestContext context) {
+        String name = context.getParameter("q");
+        List<CohortM> cohort = Context.getService(CohortService.class).findCohortsMatching(name);
+        log.info(cohort);
+        log.info("Inside doSearch Cohort");
+        System.out.println("COHORT SEARCH");
+        System.out.println(cohort);
         return new NeedsPaging<CohortM>(cohort, context);
+
     }
+
+
+
+
 }

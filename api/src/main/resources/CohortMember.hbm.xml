@@ -4,7 +4,7 @@
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
 
 <hibernate-mapping>
-    <class name="org.openmrs.module.cohort.CohortMember" table="cohort_member">
+    <class name="org.openmrs.module.cohort.CohortMember" table="cohort_m_member">
         <id name="cohortMemberId" type="java.lang.Integer" column="cohort_member_id">
             <generator class="native"/>
         </id>

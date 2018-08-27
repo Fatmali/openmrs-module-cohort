@@ -26,9 +26,10 @@ import org.openmrs.module.cohort.CohortProgram;
 import org.openmrs.module.cohort.CohortRole;
 import org.openmrs.module.cohort.CohortType;
 import org.openmrs.module.cohort.CohortVisit;
+import org.openmrs.module.cohort.api.CohortService;
 
 /**
- * Database methods for {@link cohortService}.
+ * Database methods for {@link CohortService}.
  */
 public interface CohortDAO {
 	

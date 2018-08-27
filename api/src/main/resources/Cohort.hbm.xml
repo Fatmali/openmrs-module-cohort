@@ -9,13 +9,11 @@
             <generator class="native"/>
         </id>
         <property name="name" type="java.lang.String"/>
-        <many-to-one name="location" class="org.openmrs.Location" column="location_id" not-null="true" cascade="all"/>
         <property name="startDate" type="java.util.Date"/>
         <property name="endDate" type="java.util.Date"/>
-        <many-to-one name="cohortType" class="org.openmrs.module.cohort.CohortType" 
-        			column="cohort_type_id" not-null="true" cascade="all"/>
-        <many-to-one name="cohortProgram" class="org.openmrs.module.cohort.CohortProgram"
-                    column="cohort_program_id" not-null="true" cascade="all"/>
+
+        <many-to-one name="location" class="org.openmrs.Location" column="location_id" not-null="true" cascade="all"/>
+        <many-to-one name="cohortType" class="org.openmrs.module.cohort.CohortType" column="cohort_type_id" cascade="all"/>
         <property name="groupCohort" type="java.lang.Boolean" column="is_group_cohort" length="1" not-null="true"/>
     
         <property name="description" type="java.lang.String"/>
@@ -28,6 +26,12 @@
 		<property name="dateVoided" column="date_voided" type="java.util.Date" />
 		<many-to-one name="voidedBy" column="voided_by" class="org.openmrs.User" />
         <property name="voidReason" type="java.lang.String" column="void_reason"/>
+
+        <property name="groupNumber" unique="true" type="java.lang.String" not-null="true"/>
+        <property name="landmark" type="java.lang.String"/>
+        <many-to-one name="cohortProgram" class="org.openmrs.module.cohort.CohortProgram" column="cohort_program_id" cascade="all"/>
+        <many-to-one name="provider" class="org.openmrs.Provider" column="provider_id" not-null="true" cascade="all"/>
+        <many-to-one name="program" class="org.openmrs.Program" column="program_id" cascade="all"/>
 		
     </class>
 </hibernate-mapping>
