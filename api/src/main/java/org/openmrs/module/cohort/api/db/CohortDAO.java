@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.openmrs.Location;
 import org.openmrs.module.cohort.CohortAttribute;
 import org.openmrs.module.cohort.CohortAttributeType;
 import org.openmrs.module.cohort.CohortEncounter;
@@ -27,17 +28,20 @@ import org.openmrs.module.cohort.CohortProgram;
 import org.openmrs.module.cohort.CohortRole;
 import org.openmrs.module.cohort.CohortType;
 import org.openmrs.module.cohort.CohortVisit;
+import org.openmrs.module.cohort.CohortLeader;
+import org.openmrs.module.cohort.CohortMemberVisit;
+import org.openmrs.module.cohort.api.CohortService;
 
 /**
- * Database methods for {@link cohortService}.
+ * Database methods for {@link CohortService}.
  */
 public interface CohortDAO {
-	
+
 	CohortAttribute getCohortAttributeById(Integer id);
 	CohortAttribute getCohortAttributeByUuid(String uuid);
 	CohortAttribute saveCohortAttributes(CohortAttribute att);
 	List<CohortAttribute> findCohortAttributes(Integer cohortId, Integer attributeTypeId);
-	
+
 	CohortAttributeType getCohortAttributeTypeById(Integer id);
 	CohortAttributeType getCohortAttributeTypeByUuid(String uuid);
 	CohortAttributeType getCohortAttributeTypeUuid(String uuid);
@@ -56,7 +60,7 @@ public interface CohortDAO {
 	CohortM getCohortUuid(String uuid);
 	CohortM saveCohort(CohortM cohort);
 	CohortM getCohort(Integer locationId, Integer ProgramId, Integer TypeId);
-	
+
 	CohortMember getCohortMemUuid(String uuid);
 	CohortMember getCohortMemberById(Integer id);
 	CohortMember getCohortMemberByUuid(String uuid);
@@ -96,8 +100,8 @@ public interface CohortDAO {
 	CohortVisit saveCohortVisit(CohortVisit cvisit);
 	
 	CohortAttribute findCohortAtt(Integer id);
+	List<CohortAttribute> getCohortAttributesByAttributeType(Integer attributeTypeId);
 	List<CohortAttribute> findCohortAttribute(String name);
-	
 	CohortAttributeType findCohortAttributeType(Integer id);
 	List<CohortAttributeType> getAllCohortAttributes();
 	CohortAttributeType findCohortAttributes(String attribute_type_name);
@@ -111,12 +115,12 @@ public interface CohortDAO {
 	
 	List<CohortM> findCohort(Integer id);
 	List<CohortM> findCohorts();
-	List<CohortM> findCohorts(String nameMatching, Map<String, String> attributes);
+	List<CohortM> findCohorts(String nameMatching, Map<String, String> attributes, CohortType type);
 	List<CohortM> getCohort(Integer id);
 	List<CohortM> getCohortsByLocationId(Integer id);
 	List<CohortM> getCohortByCohortTypeId(Integer id);
 	List<CohortM> getCohortByCohortProgramId(Integer id);
-	
+ 
 	List<CohortMember> findCohortMember();
 	List<CohortMember> findCohortMember(String name);
 	List<CohortMember> findCohortMembersByCohortId (Integer cohortId);
@@ -124,7 +128,8 @@ public interface CohortDAO {
 	CohortMember getCohortMember(Integer id);
 	List<CohortMember> getAllHeadCohortMembers();
 	List<CohortMember> getCohortMembersByCohortRoleId(Integer id);
-	
+	List<CohortMember> getCohortMembersByPatientId(int patientId);
+ 
 	List<CohortObs> findCohortObs();
 	CohortObs findCohortObs(Integer id);
 	
@@ -145,7 +150,12 @@ public interface CohortDAO {
 	List<CohortVisit> findCohortVisitByVisitType(Integer visitType);
 	CohortVisit findCohortVisit(Integer id);
 	List<CohortVisit> findCohortVisit(String name);
-	
+ 
+    CohortLeader getCohortLeaderByUuid(String uuid);
+    CohortLeader getCohortLeaderById(Integer id);
+    List<CohortLeader> getCohortLeadersByCohortId(Integer id);
+	CohortLeader saveCohortLeader(CohortLeader cohortLeader);
+
 	Long getCount(String name);
 	void purgeCohort(CohortM cohort);
 	void purgeCohortAtt(CohortAttribute att);
@@ -155,5 +165,9 @@ public interface CohortDAO {
 	void purgeCohortProgram(CohortProgram cvisit);
 	void purgeCohortRole(CohortRole crole);
 	void purgeCohortType(CohortType cohort);
-	void purgeCohortVisit(CohortVisit cvisit);	
+	void purgeCohortVisit(CohortVisit cvisit);
+    void purgeCohortLeader(CohortLeader cohortLeader);
+
+    CohortMemberVisit getMemberVisitByUuid(String uuid);
+	CohortMemberVisit saveMemberVisit(CohortMemberVisit cohortMemberVisit);
 }

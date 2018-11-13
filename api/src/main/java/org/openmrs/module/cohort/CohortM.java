@@ -23,6 +23,10 @@ public class CohortM extends BaseOpenmrsData {
 	private CohortProgram cohortProgram;
 	private List<CohortAttribute> attributes = new ArrayList<CohortAttribute>();
 	private Boolean groupCohort;
+	private List<CohortLeader> cohortLeaders = new ArrayList<CohortLeader>();
+	private List<CohortMember> cohortMembers = new ArrayList<CohortMember>();
+    private List<CohortVisit> cohortVisits = new ArrayList<CohortVisit>();
+
 	
 	public Integer getCohortId() {
 		return cohortId;
@@ -88,12 +92,92 @@ public class CohortM extends BaseOpenmrsData {
 		this.cohortProgram = cohortProgram;
 	}
 
+    public void setCohortMembers(List<CohortMember> cohortMembers) {
+        this.cohortMembers = cohortMembers;
+    }
+
+    public List<CohortMember> getCohortMembers() {
+	    if(cohortMembers == null) {
+	        cohortMembers = new ArrayList<>();
+        }
+        return cohortMembers;
+    }
+    public List<CohortVisit> getCohortVisits() {
+        if(cohortVisits == null) {
+            cohortVisits = new ArrayList<>();
+        }
+        return cohortVisits;
+    }
+
+    public void setCohortVisits(List<CohortVisit> cohortVisits) {
+        this.cohortVisits = cohortVisits;
+    }
+    public void setCohortLeaders(List<CohortLeader> leaders) {
+	    this.cohortLeaders = leaders;
+    }
+
+    public List<CohortMember> getActiveCohortMembers() {
+        List<CohortMember> members = new ArrayList<>();
+        for (CohortMember member : getCohortMembers()) {
+            if (!member.getVoided()) {
+                members.add(member);
+            }
+        }
+        return members;
+    }
+	public List<CohortLeader> getCohortLeaders() {
+	    if(cohortLeaders ==  null) {
+	        cohortLeaders = new ArrayList<>();
+        }
+        return cohortLeaders;
+    }
+
+    public List<CohortLeader> getActiveCohortLeaders() {
+        List<CohortLeader> leaders = new ArrayList<>();
+        for (CohortLeader leader : getCohortLeaders()) {
+            if (!leader.getVoided()) {
+                leaders.add(leader);
+            }
+        }
+        return leaders;
+    }
+
 	public List<CohortAttribute> getAttributes() {
 		if(attributes == null) {
 			attributes = new ArrayList<>();
 		}
 		return attributes;
 	}
+
+    public void addCohortLeader(CohortLeader leader) {
+        leader.setCohort(this);
+
+        for (CohortLeader currentLeader : getActiveCohortLeaders()) {
+            if (currentLeader.equals(leader)) {
+                // if we have the same CohortLeader, don't add the new leader
+                return;
+            }
+        }
+        CohortLeader currentLeader = getActiveCohortLeaders().get(0);
+        // there can only be one active leader at a time
+        currentLeader.setVoided(true);
+        currentLeader.setEndDate(new Date());
+        cohortLeaders.remove(currentLeader);
+        if (!OpenmrsUtil.collectionContains(cohortLeaders, leader)) {
+            cohortLeaders.add(leader);
+        }
+    }
+
+    public CohortMember getMember(String uuid) {
+        if (uuid != null) {
+            for (CohortMember member : getCohortMembers()) {
+                if (uuid.equals(member.getUuid())  && !member.getVoided()) {
+                    return member;
+                }
+            }
+        }
+        return null;
+    }
 
 	public void setAttributes(List<CohortAttribute> attributes) {
 		this.attributes = attributes;
@@ -351,6 +435,7 @@ public class CohortM extends BaseOpenmrsData {
 	public String toString() {
 		return this.name;
 	}
+
 }
 	
 	

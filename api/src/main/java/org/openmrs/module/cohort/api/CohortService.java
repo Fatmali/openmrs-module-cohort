@@ -24,16 +24,7 @@ import org.openmrs.Form;
 import org.openmrs.Location;
 import org.openmrs.User;
 import org.openmrs.api.OpenmrsService;
-import org.openmrs.module.cohort.CohortAttribute;
-import org.openmrs.module.cohort.CohortAttributeType;
-import org.openmrs.module.cohort.CohortEncounter;
-import org.openmrs.module.cohort.CohortM;
-import org.openmrs.module.cohort.CohortMember;
-import org.openmrs.module.cohort.CohortObs;
-import org.openmrs.module.cohort.CohortProgram;
-import org.openmrs.module.cohort.CohortRole;
-import org.openmrs.module.cohort.CohortType;
-import org.openmrs.module.cohort.CohortVisit;
+import org.openmrs.module.cohort.*;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -53,10 +44,10 @@ public interface CohortService extends OpenmrsService {
 	CohortM getCohortByUuid(String uuid);
 	CohortM getCohortByName(String name);
 	List<CohortM> getAllCohorts();
-	List<CohortM> findCohortsMatching(String nameMatching, Map<String, String> attributes);
+	List<CohortM> findCohortsMatching(String nameMatching, Map<String, String> attributes, CohortType cohortType);
 	CohortM saveCohort(CohortM cohort);
 	void purgeCohort(CohortM cohort);
-	CohortM getCohort(Integer loationId, Integer programId, Integer typeId);
+	CohortM getCohort(Integer locationId, Integer programId, Integer typeId);
 	
 	CohortMember getCohortMemberByUuid(String uuid);
 	List<CohortMember> findCohortMemberByName(String name);
@@ -136,4 +127,20 @@ public interface CohortService extends OpenmrsService {
 	void purgeCohortObs(CohortObs cobs);
 	
 	Long getCount(String name);
+	
+	CohortLeader getCohortLeaderByUuid(String uuid);
+	CohortLeader getCohortLeaderById(Integer id);
+	List<CohortLeader> getCohortLeadersByCohortId(Integer id);
+	CohortLeader saveCohortLeader(CohortLeader cohortLeader);
+	CohortLeader voidCohortLeader(CohortLeader cohortLeader, String reason);
+	void purgeCohortLeader(CohortLeader cohortLeader);
+
+	CohortMemberVisit getCohortVisitHasEncounterByUuid(String uuid);
+	CohortMemberVisit saveCohortVisitHasEncounter(CohortMemberVisit cohortMemberVisit);
+
+	List<CohortMember> findCohortMembersByPatient(int patientId);
+
+    List<CohortAttribute> getCohortAttributesByAttributeType(Integer attributeId);
+
+	List<CohortM> getCohortsByLocationId(int locationId);
 }

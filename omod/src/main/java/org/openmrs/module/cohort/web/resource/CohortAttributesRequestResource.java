@@ -31,20 +31,19 @@ public class CohortAttributesRequestResource extends DataDelegatingCrudResource<
 
         if (Context.isAuthenticated()) {
             description = new DelegatingResourceDescription();
-            if (rep instanceof DefaultRepresentation) {
-                description.addProperty("cohort", Representation.REF);
-                description.addProperty("value");
-                description.addProperty("cohortAttributeType");
-                description.addProperty("uuid");
-	            description.addSelfLink();
-            } 
-            else if (rep instanceof FullRepresentation) {
+            if (rep instanceof FullRepresentation) {
                 description.addProperty("cohort", Representation.REF);
                 description.addProperty("value");
                 description.addProperty("cohortAttributeType");
                 description.addProperty("uuid");
                 description.addProperty("auditInfo");
-	            description.addSelfLink();
+                description.addSelfLink();
+            }
+            else {
+                description.addProperty("value");
+                description.addProperty("cohortAttributeType");
+                description.addProperty("uuid");
+                description.addSelfLink();
             }
         }
         return description;
@@ -101,10 +100,6 @@ public class CohortAttributesRequestResource extends DataDelegatingCrudResource<
     		cohorto = Context.getService(CohortService.class).getCohortByUuid(cohort);
     	}
     	
-    	if(cohorto == null) {
-    		throw new IllegalArgumentException("No valid value specified for param cohort");
-    	}
-    	
     	Integer attributeId = null;
     	CohortAttributeType attTypeo = null;
     	
@@ -119,8 +114,13 @@ public class CohortAttributesRequestResource extends DataDelegatingCrudResource<
     			attributeId = attTypeo.getCohortAttributeTypeId();
     		}
     	}
-    	
-    	List<CohortAttribute> list = Context.getService(CohortService.class).findCohortAttributes(cohorto.getCohortId(), attributeId);
-		return new NeedsPaging<CohortAttribute>(list, context);
+
+    	    if(cohorto != null) {
+                List<CohortAttribute> list = Context.getService(CohortService.class).findCohortAttributes(cohorto.getCohortId(), attributeId);
+                return new NeedsPaging<CohortAttribute>(list, context);
+    	} else {
+                List<CohortAttribute> list = Context.getService(CohortService.class).getCohortAttributesByAttributeType(attributeId);
+                return new NeedsPaging<CohortAttribute>(list, context);
+                }
     }
 }
